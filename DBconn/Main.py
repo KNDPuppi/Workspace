@@ -1,4 +1,6 @@
-#Importiere benötigte Module
+
+#! ############################################Importiere Module und Funktionen########################################################
+
 import tkinter as tk
 import csv
 import mysql.connector
@@ -8,8 +10,10 @@ from tkinter import Tk, Button, Entry, Label
 from tkinter.filedialog import asksaveasfilename
 from datetime import datetime, timedelta
 
- 
 
+ #! ###########################################Aufruf Unterfunktionen Def###############################################################
+
+#? def- Schreibe alle Daten aus Datenbank in ein Excelfile 
 def button_DBSaveAll():
     db_connection = mysql.connector.connect(
     host="localhost",
