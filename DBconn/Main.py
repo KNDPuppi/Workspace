@@ -19,8 +19,10 @@ from datetime import datetime, timedelta
 
 #? def- Aufruf aller Widgets und Design Funktionen 
 def HomeScreenConfig():
-
-    Read_Config()
+    global host, user, database
+    global entry_host, entry_root, entry_db, entry_pw
+    
+   
 
     style = ttk.Style(fenster)
 
@@ -41,6 +43,7 @@ def HomeScreenConfig():
     label = tk.Label(fenster, text='01') 
     label.pack(side="bottom"  )
 
+   
     #Button Save alles
     button_DB_save_all = tk.Button(fenster, text="SaveAll!" , command=button_DBSaveAll)
     button_DB_save_all .pack()
@@ -50,7 +53,7 @@ def HomeScreenConfig():
     button_DB_save_cd .pack()
 
     #Button schreibe Config
-    button_DB_wr_config = tk.Button(fenster, text="Save Config!" , command=lambda: Write_Config(host,user,database) )
+    button_DB_wr_config = tk.Button(fenster, text="Save Config!" , command=Write_Config)
     button_DB_wr_config .pack()
     
         
@@ -64,7 +67,6 @@ def HomeScreenConfig():
     entry_host = Label(fenster, text="Host ")
     entry_host.pack()
     entry_host = Entry(fenster)
-    entry_host.insert(0, host)
     entry_host.pack()
 
       # Eingabefeld für root
@@ -84,13 +86,22 @@ def HomeScreenConfig():
     entry_pw.pack()
     entry_pw = Entry(fenster)
     entry_pw.pack()
-   
+
+    Read_Config()
+
+    entry_host.insert(0, host)  # Führe die Einfügung erst nach dem Lesen der Konfigurationswerte durch
+    entry_root.insert(0, user)
+    entry_db.insert(0, database)
+
+    
 #? def- Schreibe alle Daten aus Datenbank in ein Excelfile (mit asksaveasfilename)  
 def button_DBSaveAll():
+    global host, user, database
+    
     db_connection = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    database="ford1419_st2_eol"
+    host= host,
+    user=user,
+    database=database
     )
     cursor = db_connection.cursor()
 
@@ -160,6 +171,7 @@ def button_DBSaveCurDay(inputDay):
 def Read_Config():
     global host, user, database
     
+    
     # Bestimme den Pfad zum Verzeichnis der Python-Datei
     script_directory = os.path.dirname(os.path.abspath(__file__))
 
@@ -174,8 +186,14 @@ def Read_Config():
     user = config.get('Database', 'User')
     database = config.get('Database', 'Database')
   
-def Write_Config(host, user, database):
-         
+def Write_Config():
+    global host, user, database 
+    global entry_host, entry_root, entry_db, entry_pw 
+    
+    host = entry_host.get()
+    user = entry_root.get()
+    database = entry_db.get()   
+          
     # Bestimme den Pfad zum Verzeichnis der Python-Datei
     script_directory = os.path.dirname(os.path.abspath(__file__))
 
@@ -192,10 +210,15 @@ def Write_Config(host, user, database):
         'User': user,
         'Database': database
     }
+    print(host)
+    print("Config data before writing:", config['Database'])  # Testausgabe
 
     # Konfigurationsdaten in die Datei schreiben
     with open(config_file_path, 'w') as config_file:
         config.write(config_file)
+    print("Config data after writing:", config['Database'])  # Testausgabe
+
+            
 #! ########################################### GUI Aufruf und Hauptschleife###############################################################
 # Öffne Homescreen
 fenster = tk.Tk()
