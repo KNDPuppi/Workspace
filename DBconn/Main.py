@@ -9,19 +9,18 @@ import time
 import ctypes
 import winreg
 import configparser
+import os
 from tkinter import Tk, ttk, Button, Entry, Label
 from tkinter.filedialog import asksaveasfilename
 from datetime import datetime, timedelta
 
 
-host = 'None'
-user = 'None'
-database ='None'
-
  #! ###########################################Aufruf Unterfunktionen Def###############################################################
 
 #? def- Aufruf aller Widgets und Design Funktionen 
 def HomeScreenConfig():
+
+    Read_Config()
 
     style = ttk.Style(fenster)
 
@@ -156,10 +155,16 @@ def button_DBSaveCurDay(inputDay):
 
 def Read_Config():
     global host, user, database
+    
+    # Bestimme den Pfad zum Verzeichnis der Python-Datei
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+
+    # Konstruiere den Pfad zur config.ini-Datei
+    config_file_path = os.path.join(script_directory, 'config.ini')
+
     # Konfigurationsdatei erstellen oder laden
     config = configparser.ConfigParser()
-    config.read('config.ini')
-
+    config.read(config_file_path)
     # Informationen aus der Konfigurationsdatei lesen
     host = config.get('Database', 'Host')
     user = config.get('Database', 'User')
@@ -171,8 +176,8 @@ def Read_Config():
 fenster = tk.Tk()
 #In jedem Zyklus wird die Config für das Hauptbild aufgerufen
 HomeScreenConfig()
-#Nach öffnen des fensters wird einmalig die Konfiguration für die Datenbank ausgelesen
-fenster.protocol("WM_DELETE_WINDOW", Read_Config())
+
+
 
 
 
