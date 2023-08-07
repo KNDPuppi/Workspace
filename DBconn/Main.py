@@ -43,13 +43,15 @@ def HomeScreenConfig():
 
     #Button Save alles
     button_DB_save_all = tk.Button(fenster, text="SaveAll!" , command=button_DBSaveAll)
-    button_DB_save_all .config(width=20, height=3)
-    button_DB_save_all .place(x=20, y=50, )
+    button_DB_save_all .pack()
 
-  #Button Save aktuellen Tag 
+    #Button Save aktuellen Tag 
     button_DB_save_cd = tk.Button(fenster, text="SaveDay!" , command=lambda: button_DBSaveCurDay(entry))
-    button_DB_save_cd .config(width=20, height=3)
-    button_DB_save_cd .place(x=160, y=50, )
+    button_DB_save_cd .pack()
+
+    #Button schreibe Config
+    button_DB_wr_config = tk.Button(fenster, text="Save Config!" , command=lambda: Write_Config(host,user,database) )
+    button_DB_wr_config .pack()
     
         
     # Eingabefeld für das Datum hinzufügen
@@ -153,6 +155,8 @@ def button_DBSaveCurDay(inputDay):
     cursor.close()
     db_connection.close() 
 
+
+#? Lese aktuelle Datenbank daten
 def Read_Config():
     global host, user, database
     
@@ -170,7 +174,28 @@ def Read_Config():
     user = config.get('Database', 'User')
     database = config.get('Database', 'Database')
   
+def Write_Config(host, user, database):
+         
+    # Bestimme den Pfad zum Verzeichnis der Python-Datei
+    script_directory = os.path.dirname(os.path.abspath(__file__))
 
+    # Konstruiere den Pfad zur config.ini-Datei
+    config_file_path = os.path.join(script_directory, 'config.ini')
+
+    # Konfigurationsdatei erstellen oder laden
+    config = configparser.ConfigParser()
+    config.read(config_file_path)
+
+    # Aktualisiere die Konfigurationsdaten
+    config['Database'] = {
+        'Host': host,
+        'User': user,
+        'Database': database
+    }
+
+    # Konfigurationsdaten in die Datei schreiben
+    with open(config_file_path, 'w') as config_file:
+        config.write(config_file)
 #! ########################################### GUI Aufruf und Hauptschleife###############################################################
 # Öffne Homescreen
 fenster = tk.Tk()
