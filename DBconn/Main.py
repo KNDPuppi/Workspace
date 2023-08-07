@@ -10,7 +10,7 @@ import ctypes
 import winreg
 import configparser
 import os
-from tkinter import Tk, ttk, Button, Entry, Label
+from tkinter import Tk, ttk, Button, Entry, Label, Toplevel
 from tkinter.filedialog import asksaveasfilename
 from datetime import datetime, timedelta
 
@@ -47,6 +47,10 @@ def HomeScreenConfig():
     #Button Save alles
     button_DB_save_all = tk.Button(fenster, text="SaveAll!" , command=button_DBSaveAll)
     button_DB_save_all .pack()
+
+    #Button DataBase
+    button_Database = tk.Button(fenster, text="Database!" , command=open_database_settings)
+    button_Database .pack()
 
     #Button Save aktuellen Tag 
     button_DB_save_cd = tk.Button(fenster, text="SaveDay!" , command=lambda: button_DBSaveCurDay(entry))
@@ -128,6 +132,8 @@ def button_DBSaveAll():
     # Verbindung und Cursor schließen
     cursor.close()
     db_connection.close()
+     # Schließe das Wurzelfenster, nachdem die Aktionen abgeschlossen sind
+    root.destroy()
 
 #? def- Schreibe alle Daten eines Tages in ein Excelfile (mit asksaveasfilename)
 def button_DBSaveCurDay(inputDay):
@@ -162,9 +168,11 @@ def button_DBSaveCurDay(inputDay):
         # Daten in CSV schreiben
         csv_writer.writerows(results)
 
-    # Verbindung und Cursor schließen
+   # Verbindung und Cursor schließen
     cursor.close()
-    db_connection.close() 
+    db_connection.close()
+     # Schließe das Wurzelfenster, nachdem die Aktionen abgeschlossen sind
+    root.destroy()
 
 
 #? Lese aktuelle Datenbank daten
@@ -218,18 +226,16 @@ def Write_Config():
         config.write(config_file)
     print("Config data after writing:", config['Database'])  # Testausgabe
 
+
+def open_database_settings():
+    db_settings_window = Toplevel(fenster)
+    db_settings_window.title("Database Settings")
             
 #! ########################################### GUI Aufruf und Hauptschleife###############################################################
 # Öffne Homescreen
 fenster = tk.Tk()
 #In jedem Zyklus wird die Config für das Hauptbild aufgerufen
 HomeScreenConfig()
-
-
-
-
-
-
 
 
 
