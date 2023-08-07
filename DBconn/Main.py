@@ -63,6 +63,7 @@ def HomeScreenConfig():
     entry_host = Label(fenster, text="Host ")
     entry_host.pack()
     entry_host = Entry(fenster)
+    entry_host.insert(0, host)
     entry_host.pack()
 
       # Eingabefeld für root
@@ -154,6 +155,7 @@ def button_DBSaveCurDay(inputDay):
     db_connection.close() 
 
 def Read_Config():
+    global host, user, database
     # Konfigurationsdatei erstellen oder laden
     config = configparser.ConfigParser()
     config.read('config.ini')
@@ -167,7 +169,7 @@ def Read_Config():
 #! ########################################### GUI Aufruf und Hauptschleife###############################################################
 # Öffne Homescreen
 fenster = tk.Tk()
-#In jedem Zyklus wird die Config für das Hauptbil aufgerufen
+#In jedem Zyklus wird die Config für das Hauptbild aufgerufen
 HomeScreenConfig()
 #Nach öffnen des fensters wird einmalig die Konfiguration für die Datenbank ausgelesen
 fenster.protocol("WM_DELETE_WINDOW", Read_Config())
