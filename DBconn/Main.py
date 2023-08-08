@@ -22,8 +22,10 @@ from GUIConfig import HomeScreenConfig
 
 #! ########################################### GUI Aufruf und Hauptschleife###############################################################
 
-def Button_write_db_config(): 
-    print('test')
+def Button_write_db_config(host, user, database): 
+    print (host)
+    print (user)
+    print (database) 
 
 
 # Öffne Homescreen
@@ -35,10 +37,7 @@ user = VarTransIn_Read_Config['t_user']
 database = VarTransIn_Read_Config['t_database']
 
 
-VarTransIn_HomeScreen = HomeScreenConfig(Main_GUI, host, user, database, Button_write_db_config )
-host = VarTransIn_HomeScreen['t_host']
-user = VarTransIn_HomeScreen['t_user']
-database = VarTransIn_HomeScreen['t_database']
+HomeScreenConfig(Main_GUI, host, user, database, Button_write_db_config )
 
 
 

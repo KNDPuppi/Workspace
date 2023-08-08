@@ -1,6 +1,7 @@
 
 #! ############################################Importiere Module und Funktionen  ############################################################
 import tkinter as tk
+from webbrowser import get
 import winreg
 
 from tkinter import ttk, Entry, Label, Button
@@ -9,7 +10,7 @@ from tkinter import ttk, Entry, Label, Button
 #! ############################################Importiere Module und Funktionen Ende ########################################################
 
 
-def HomeScreenConfig(Main_GUI, host, user, database, Button_write_db_config):
+def HomeScreenConfig(Main_GUI, host, user, database, button_function):
          
    
     style = ttk.Style(Main_GUI)
@@ -30,10 +31,7 @@ def HomeScreenConfig(Main_GUI, host, user, database, Button_write_db_config):
     # Textfeld
     label = tk.Label(Main_GUI, text='01') 
     label.pack(side="bottom"  )
-
-     # Erstelle einen Button
-    button_trigger = Button(Main_GUI, text="Funktion im Hauptprogramm auslösen", command=Button_write_db_config)
-    button_trigger.pack()  
+       
     
         
     # Eingabefeld für das Datum hinzufügen
@@ -71,11 +69,17 @@ def HomeScreenConfig(Main_GUI, host, user, database, Button_write_db_config):
     entry_user.insert(0, user)
     entry_db.insert(0, database)
 
-    #defeniere zu übergebende Variablen
-    transfer_variables = {
-        't_host' : entry_host.get(),
-        't_user' : entry_user.get(),
-        't_database' : entry_db.ge()
-    }
 
-    return transfer_variables
+
+
+
+
+
+    #!################################################ Buttons 
+
+    # Erstelle einen Button
+    button_trigger = Button(Main_GUI, text="Funktion im Hauptprogramm auslösen", command=lambda: button_function(entry_host.get(), entry_user.get(), entry_db.get()))
+    button_trigger.pack()  
+
+
+   
