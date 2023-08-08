@@ -14,7 +14,7 @@ from tkinter import Tk, ttk, Button, Entry, Label, Toplevel
 from tkinter.filedialog import asksaveasfilename
 from datetime import datetime, timedelta
 
-from DBConfig import Read_Config
+from DBConfig import Read_Config, Write_Config
 from GUIConfig import HomeScreenConfig
 
 #! ###########################################Aufruf Unterfunktionen Def###############################################################
@@ -23,9 +23,7 @@ from GUIConfig import HomeScreenConfig
 #! ########################################### GUI Aufruf und Hauptschleife###############################################################
 
 def Button_write_db_config(host, user, database): 
-    print (host)
-    print (user)
-    print (database) 
+    Write_Config(host, user,database)
 
 
 # Öffne Homescreen

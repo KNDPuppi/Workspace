@@ -75,7 +75,7 @@ def HomeScreenConfig(Main_GUI, host, user, database, button_function):
 
 
 
-    #!################################################ Buttons 
+    #!################################################ Eingabe #####################################################################################
 
     # Erstelle einen Button
     button_trigger = Button(Main_GUI, text="Funktion im Hauptprogramm auslösen", command=lambda: button_function(entry_host.get(), entry_user.get(), entry_db.get()))
