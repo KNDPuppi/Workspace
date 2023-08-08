@@ -220,15 +220,14 @@ def Write_Config():
         'User': user,
         'Database': database
     }
-    print(host)
-    print("Config data before writing:", config['Database'])  # Testausgabe
-
+    
     # Konfigurationsdaten in die Datei schreiben
     with open(config_file_path, 'w') as config_file:
         config.write(config_file)
-    print("Config data after writing:", config['Database'])  # Testausgabe
 
 
+
+#! ########################################### Neues Fenster Toplevel ###############################################################   
 def open_database_settings():
     db_settings_window = Toplevel(fenster)
     db_settings_window.title("Database Settings")
