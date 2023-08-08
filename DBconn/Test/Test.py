@@ -188,60 +188,12 @@ def button_DBSaveCurDay(inputDay):
     root.destroy()
 
 
-#! Lese aktuelle Datenbank daten
-def Read_Config():
-    global host, user, database
-    
-    
-    # Bestimme den Pfad zum Verzeichnis der Python-Datei
-    script_directory = os.path.dirname(os.path.abspath(__file__))
-
-    # Konstruiere den Pfad zur config.ini-Datei
-    config_file_path = os.path.join(script_directory, 'config.ini')
-
-    # Konfigurationsdatei erstellen oder laden
-    config = configparser.ConfigParser()
-    config.read(config_file_path)
-    # Informationen aus der Konfigurationsdatei lesen
-    host = config.get('Database', 'Host')
-    user = config.get('Database', 'User')
-    database = config.get('Database', 'Database')
-
-#! Schreibe die aktuellen Zugangsdaten der Config Datenbank  
-def Write_Config():
-    global host, user, database 
-    global entry_host, entry_root, entry_db, entry_pw 
-    
-    host = entry_host.get()
-    user = entry_root.get()
-    database = entry_db.get()   
-          
-    # Bestimme den Pfad zum Verzeichnis der Python-Datei
-    script_directory = os.path.dirname(os.path.abspath(__file__))
-
-    # Konstruiere den Pfad zur config.ini-Datei
-    config_file_path = os.path.join(script_directory, 'config.ini')
-
-    # Konfigurationsdatei erstellen oder laden
-    config = configparser.ConfigParser()
-    config.read(config_file_path)
-
-    # Aktualisiere die Konfigurationsdaten
-    config['Database'] = {
-        'Host': host,
-        'User': user,
-        'Database': database
-    }
-    
-    # Konfigurationsdaten in die Datei schreiben
-    with open(config_file_path, 'w') as config_file:
-        config.write(config_file)
 
 
 
 #! ########################################### Neues Fenster Toplevel ###############################################################   
 def open_database_settings():
-    db_settings_window = Toplevel(fenster)
+    db_settings_window = Toplevel(Main_GUI)
     db_settings_window.title("Database Settings")
             
 #! ########################################### GUI Aufruf und Hauptschleife###############################################################
