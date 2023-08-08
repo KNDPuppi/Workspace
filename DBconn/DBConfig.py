@@ -117,7 +117,7 @@ def DBSaveCurDay(host, user, database, inputDay):
     database=database
     )
     cursor = db_connection.cursor()
-    date= inputDay.get()
+    date= inputDay
 
    
     select_query = "SELECT * FROM prozessdaten WHERE DATE(timestamp) = '" + date + "'"

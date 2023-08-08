@@ -2,17 +2,7 @@
 #! ############################################Importiere Module und Funktionen########################################################
 
 import tkinter as tk
-import csv
-import mysql.connector
-import schedule
-import time
-import ctypes
-import winreg
-import configparser
-import os
-from tkinter import Tk, ttk, Button, Entry, Label, Toplevel
-from tkinter.filedialog import asksaveasfilename
-from datetime import datetime, timedelta
+
 
 from DBConfig import Read_Config, Write_Config, DBSaveAll, DBSaveCurDay
 from GUIConfig import HomeScreenConfig

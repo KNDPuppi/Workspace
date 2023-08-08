@@ -1,11 +1,10 @@
 
 #! ############################################Importiere Module und Funktionen  ############################################################
 import tkinter as tk
-from webbrowser import get
 import winreg
 
 from tkinter import ttk, Entry, Label, Button
-
+from tkcalendar import DateEntry
 
 #! ############################################Importiere Module und Funktionen Ende ########################################################
 
@@ -30,41 +29,42 @@ def HomeScreenConfig(Main_GUI, host, user, database,
 
     Main_GUI.title("DB Collector")
     Main_GUI.geometry("800x400")
-    
-    # Textfeld
-    label = tk.Label(Main_GUI, text='01') 
-    label.pack(side="bottom"  )
-       
-    
+
+    frame1 = tk.Frame(Main_GUI)
+    frame1.pack()
+
+    frame2 = tk.Frame(Main_GUI)
+    frame2.pack()
+          
         
     # Eingabefeld für das Datum hinzufügen
-    entry_label = Label(Main_GUI, text="Datum (YYYY-MM-DD): ")
-    entry_label.pack()
-    entry_Date = Entry(Main_GUI)
+    entry_Date = DateEntry(frame1, date_pattern="yyyy-mm-dd")
     entry_Date.pack()
 
+
+
      # Eingabefeld für das host
-    entry_host = Label(Main_GUI, text="Host ")
+    entry_host = Label(frame2, text="Host ")
     entry_host.pack()
-    entry_host = Entry(Main_GUI)
+    entry_host = Entry(frame2)
     entry_host.pack()
 
       # Eingabefeld für root
-    entry_user = Label(Main_GUI, text="user ")
+    entry_user = Label(frame2, text="user ")
     entry_user.pack()
-    entry_user = Entry(Main_GUI)
+    entry_user = Entry(frame2)
     entry_user.pack()
 
       # Eingabefeld für Database
-    entry_db = Label(Main_GUI, text="database ")
+    entry_db = Label(frame2, text="database ")
     entry_db.pack()
-    entry_db = Entry(Main_GUI)
+    entry_db = Entry(frame2)
     entry_db.pack()
 
           # Eingabefeld für root
-    entry_pw = Label(Main_GUI, text="Password ")
+    entry_pw = Label(frame2, text="Password ")
     entry_pw.pack()
-    entry_pw = Entry(Main_GUI)
+    entry_pw = Entry(master=frame2)
     entry_pw.pack()
   
 
