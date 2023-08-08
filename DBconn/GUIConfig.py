@@ -3,13 +3,13 @@
 import tkinter as tk
 import winreg
 
-from tkinter import ttk, Entry, Label
+from tkinter import ttk, Entry, Label, Button
 
 
 #! ############################################Importiere Module und Funktionen Ende ########################################################
 
 
-def HomeScreenConfig(Main_GUI, host, user, database):
+def HomeScreenConfig(Main_GUI, host, user, database, Button_write_db_config):
          
    
     style = ttk.Style(Main_GUI)
@@ -31,7 +31,9 @@ def HomeScreenConfig(Main_GUI, host, user, database):
     label = tk.Label(Main_GUI, text='01') 
     label.pack(side="bottom"  )
 
-       
+     # Erstelle einen Button
+    button_trigger = Button(Main_GUI, text="Funktion im Hauptprogramm auslösen", command=Button_write_db_config)
+    button_trigger.pack()  
     
         
     # Eingabefeld für das Datum hinzufügen
@@ -47,10 +49,10 @@ def HomeScreenConfig(Main_GUI, host, user, database):
     entry_host.pack()
 
       # Eingabefeld für root
-    entry_root = Label(Main_GUI, text="root ")
-    entry_root.pack()
-    entry_root = Entry(Main_GUI)
-    entry_root.pack()
+    entry_user = Label(Main_GUI, text="user ")
+    entry_user.pack()
+    entry_user = Entry(Main_GUI)
+    entry_user.pack()
 
       # Eingabefeld für Database
     entry_db = Label(Main_GUI, text="database ")
@@ -66,5 +68,14 @@ def HomeScreenConfig(Main_GUI, host, user, database):
   
 
     entry_host.insert(0, host)  # Führe die Einfügung erst nach dem Lesen der Konfigurationswerte durch
-    entry_root.insert(0, user)
+    entry_user.insert(0, user)
     entry_db.insert(0, database)
+
+    #defeniere zu übergebende Variablen
+    transfer_variables = {
+        't_host' : entry_host.get(),
+        't_user' : entry_user.get(),
+        't_database' : entry_db.ge()
+    }
+
+    return transfer_variables

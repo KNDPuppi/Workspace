@@ -5,8 +5,7 @@ import os
 
 #! Lese aktuelle Datenbank daten
 def Read_Config():
-
-   
+  
     
     # Bestimme den Pfad zum Verzeichnis der Python-Datei
     script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -30,3 +29,4 @@ def Read_Config():
     }
 
     return transfer_variables
+
