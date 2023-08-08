@@ -22,14 +22,15 @@ from DBConfig import Read_Config
 
 #! ########################################### GUI Aufruf und Hauptschleife###############################################################
 # Öffne Homescreen
+
 Main_GUI = tk.Tk()
 
-Read_Config()
 
 transfer_var = Read_Config()
-host =transfer_var('t_host')
-user =transfer_var('t_user')
-database =transfer_var('t_database')
+
+host = transfer_var['t_host']
+user = transfer_var['t_user']
+database = transfer_var['t_database']
 
 print(host)
 
