@@ -20,12 +20,15 @@ from GUIConfig import HomeScreenConfig
 #! ###########################################Aufruf Unterfunktionen Def###############################################################
 
 
-#! ########################################### GUI Aufruf und Hauptschleife###############################################################
 
-def Button_write_db_config(host, user, database): 
+
+def Button_write_DB_config(host, user, database): 
     Write_Config(host, user,database)
 
-
+def Button_read_DB_config(host, user, database):
+    Read_Config(host,user,database)
+    
+#! ########################################### GUI Aufruf und Hauptschleife###############################################################
 # Öffne Homescreen
 Main_GUI = tk.Tk()
 
@@ -35,7 +38,9 @@ user = VarTransIn_Read_Config['t_user']
 database = VarTransIn_Read_Config['t_database']
 
 
-HomeScreenConfig(Main_GUI, host, user, database, Button_write_db_config )
+HomeScreenConfig(Main_GUI, host, user, database,
+                 Button_write_DB_config,
+                 Button_read_DB_config)
 
 
 

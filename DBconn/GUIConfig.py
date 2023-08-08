@@ -10,7 +10,7 @@ from tkinter import ttk, Entry, Label, Button
 #! ############################################Importiere Module und Funktionen Ende ########################################################
 
 
-def HomeScreenConfig(Main_GUI, host, user, database, button_function):
+def HomeScreenConfig(Main_GUI, host, user, database, button_function_WrDB, button_function_RdDB,):
          
    
     style = ttk.Style(Main_GUI)
@@ -77,9 +77,12 @@ def HomeScreenConfig(Main_GUI, host, user, database, button_function):
 
     #!################################################ Eingabe #####################################################################################
 
-    # Erstelle einen Button
-    button_trigger = Button(Main_GUI, text="Funktion im Hauptprogramm auslösen", command=lambda: button_function(entry_host.get(), entry_user.get(), entry_db.get()))
-    button_trigger.pack()  
+    # Button Speichere DB_Configdaten
+    button_writeDB = Button(Main_GUI, text="Save DB Config", command=lambda: button_function_WrDB(entry_host.get(), entry_user.get(), entry_db.get()))
+    button_writeDB.pack()  
 
+    #Button Lese DB Configurationsdaten
+    button_readDB = Button(Main_GUI, text="Save DB Config", command=lambda: button_function_RdDB(entry_host.insert(), entry_user.insert(), entry_db.insert))
+    button_readDB.pack()  
 
    
