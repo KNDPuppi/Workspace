@@ -17,11 +17,12 @@ from datetime import datetime, timedelta
 
  #! ###########################################Aufruf Unterfunktionen Def###############################################################
 
-#? def- Aufruf aller Widgets und Design Funktionen 
+#! def- Aufruf aller Widgets und Design Funktionen 
 def HomeScreenConfig():
     global host, user, database
     global entry_host, entry_root, entry_db, entry_pw
-    
+
+      
    
 
     style = ttk.Style(fenster)
@@ -98,7 +99,7 @@ def HomeScreenConfig():
     entry_db.insert(0, database)
 
     
-#? def- Schreibe alle Daten aus Datenbank in ein Excelfile (mit asksaveasfilename)  
+#! def- Schreibe alle Daten aus Datenbank in ein Excelfile (mit asksaveasfilename)  
 def button_DBSaveAll():
     global host, user, database
     
@@ -135,13 +136,13 @@ def button_DBSaveAll():
      # Schließe das Wurzelfenster, nachdem die Aktionen abgeschlossen sind
     root.destroy()
 
-#? def- Schreibe alle Daten eines Tages in ein Excelfile (mit asksaveasfilename)
+#! def- Schreibe alle Daten eines Tages in ein Excelfile (mit asksaveasfilename)
 def button_DBSaveCurDay(inputDay):
     
     db_connection = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    database="ford1419_st2_eol"
+    host= host,
+    user=user,
+    database=database
     )
     cursor = db_connection.cursor()
     date= inputDay.get()
@@ -175,7 +176,7 @@ def button_DBSaveCurDay(inputDay):
     root.destroy()
 
 
-#? Lese aktuelle Datenbank daten
+#! Lese aktuelle Datenbank daten
 def Read_Config():
     global host, user, database
     
@@ -193,7 +194,8 @@ def Read_Config():
     host = config.get('Database', 'Host')
     user = config.get('Database', 'User')
     database = config.get('Database', 'Database')
-  
+
+#! Schreibe die aktuellen Zugangsdaten der Config Datenbank  
 def Write_Config():
     global host, user, database 
     global entry_host, entry_root, entry_db, entry_pw 
