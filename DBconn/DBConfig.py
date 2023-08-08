@@ -22,7 +22,7 @@ def Read_Config():
     user = config.get('Database', 'User')
     database = config.get('Database', 'Database')
 
- #defeniere zu übergebende Variablen
+    #defeniere zu übergebende Variablen
     transfer_variables = {
         't_host' : host,
         't_user' : user,

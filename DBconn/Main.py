@@ -15,7 +15,7 @@ from tkinter.filedialog import asksaveasfilename
 from datetime import datetime, timedelta
 
 from DBConfig import Read_Config
-
+from GUIConfig import HomeScreenConfig
 
 #! ###########################################Aufruf Unterfunktionen Def###############################################################
 
@@ -26,11 +26,12 @@ from DBConfig import Read_Config
 Main_GUI = tk.Tk()
 
 
-transfer_var = Read_Config()
+VarTransIn_Read_Config = Read_Config()
+host = VarTransIn_Read_Config['t_host']
+user = VarTransIn_Read_Config['t_user']
+database = VarTransIn_Read_Config['t_database']
 
-host = transfer_var['t_host']
-user = transfer_var['t_user']
-database = transfer_var['t_database']
+HomeScreenConfig(Main_GUI, host, user, database)
 
 print(host)
 
