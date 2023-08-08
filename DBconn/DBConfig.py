@@ -3,16 +3,10 @@
 import configparser
 import os
 
-
 #! Lese aktuelle Datenbank daten
 def Read_Config():
 
-    #defeniere zu übergebende Variablen
-    transfer_variables = {
-        't_host' : host,
-        't_user' : user,
-        't_database' : database 
-    }
+   
     
     # Bestimme den Pfad zum Verzeichnis der Python-Datei
     script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -28,5 +22,11 @@ def Read_Config():
     user = config.get('Database', 'User')
     database = config.get('Database', 'Database')
 
+ #defeniere zu übergebende Variablen
+    transfer_variables = {
+        't_host' : host,
+        't_user' : user,
+        't_database' : database 
+    }
 
     return transfer_variables
