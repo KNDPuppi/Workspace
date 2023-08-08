@@ -10,7 +10,10 @@ from tkinter import ttk, Entry, Label, Button
 #! ############################################Importiere Module und Funktionen Ende ########################################################
 
 
-def HomeScreenConfig(Main_GUI, host, user, database, button_function_WrDB, button_function_Save_all):
+def HomeScreenConfig(Main_GUI, host, user, database,
+                     button_function_WrDB,
+                     button_function_Save_all,
+                     button_function_Save_Day):
          
    
     style = ttk.Style(Main_GUI)
@@ -37,8 +40,8 @@ def HomeScreenConfig(Main_GUI, host, user, database, button_function_WrDB, butto
     # Eingabefeld für das Datum hinzufügen
     entry_label = Label(Main_GUI, text="Datum (YYYY-MM-DD): ")
     entry_label.pack()
-    entry = Entry(Main_GUI)
-    entry.pack()
+    entry_Date = Entry(Main_GUI)
+    entry_Date.pack()
 
      # Eingabefeld für das host
     entry_host = Label(Main_GUI, text="Host ")
@@ -84,4 +87,8 @@ def HomeScreenConfig(Main_GUI, host, user, database, button_function_WrDB, butto
     # Button SAVE All
     button_SaveDB_ALL = Button(Main_GUI, text="Save DB ALL", command=button_function_Save_all)
     button_SaveDB_ALL.pack()  
+
+    # Button SAVE Day
+    button_SaveDB_Day = Button(Main_GUI, text="Save DB Day", command=lambda: button_function_Save_Day(entry_Date.get()))
+    button_SaveDB_Day.pack() 
    

@@ -1,6 +1,5 @@
 
-
-
+#! ############################################Importiere Module und Funktionen  ############################################################
 import csv
 import mysql.connector
 import configparser
@@ -104,3 +103,46 @@ def DBSaveAll(host, user, database):
     db_connection.close()
      # Schließe das Wurzelfenster, nachdem die Aktionen abgeschlossen sind
     root.destroy()
+
+
+
+
+
+#! def- Schreibe alle Daten eines Tages in ein Excelfile (mit asksaveasfilename)
+def DBSaveCurDay(host, user, database, inputDay):
+    
+    db_connection = mysql.connector.connect(
+    host= host,
+    user=user,
+    database=database
+    )
+    cursor = db_connection.cursor()
+    date= inputDay.get()
+
+   
+    select_query = "SELECT * FROM prozessdaten WHERE DATE(timestamp) = '" + date + "'"
+    cursor.execute(select_query)
+    results = cursor.fetchall()
+
+
+    root = Tk()
+    root.withdraw()
+
+    file_path = asksaveasfilename(defaultextension=".csv", filetypes=[("CSV Dateien", "*.csv")])
+
+     # CSV-Datei zum Schreiben öffnen
+    with open(file_path, 'w', newline='') as csv_file:
+        csv_writer = csv.writer(csv_file)
+
+        # Spaltennamen schreiben
+        column_names = [i[0] for i in cursor.description]
+        csv_writer.writerow(column_names)
+
+        # Daten in CSV schreiben
+        csv_writer.writerows(results)
+
+   # Verbindung und Cursor schließen
+    cursor.close()
+    db_connection.close()
+     # Schließe das Wurzelfenster, nachdem die Aktionen abgeschlossen sind
+    root.destroy()    

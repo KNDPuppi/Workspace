@@ -14,7 +14,7 @@ from tkinter import Tk, ttk, Button, Entry, Label, Toplevel
 from tkinter.filedialog import asksaveasfilename
 from datetime import datetime, timedelta
 
-from DBConfig import Read_Config, Write_Config, DBSaveAll
+from DBConfig import Read_Config, Write_Config, DBSaveAll, DBSaveCurDay
 from GUIConfig import HomeScreenConfig
 
 #! ###########################################Aufruf Unterfunktionen Def###############################################################
@@ -26,10 +26,21 @@ def Button_write_DB_config(host, user, database):
     Write_Config(host, user,database)
 
 def Button_Save_all_data():
-    global host, user, database
+    VarTransIn_Read_Config = Read_Config()
+    host = VarTransIn_Read_Config['t_host']
+    user = VarTransIn_Read_Config['t_user']
+    database = VarTransIn_Read_Config['t_database']
+
     DBSaveAll(host, user,database)
     
-    
+def Button_Save_CurrenDay(inputDay):  
+    VarTransIn_Read_Config = Read_Config()
+    host = VarTransIn_Read_Config['t_host']
+    user = VarTransIn_Read_Config['t_user']
+    database = VarTransIn_Read_Config['t_database']
+
+    DBSaveCurDay(host, user, database, inputDay)
+ 
     
 #! ########################################### GUI Aufruf und Hauptschleife###############################################################
 # Öffne Homescreen
@@ -43,7 +54,9 @@ database = VarTransIn_Read_Config['t_database']
 
 HomeScreenConfig(Main_GUI, host, user, database,
                  Button_write_DB_config,
-                 Button_Save_all_data )
+                 Button_Save_all_data,
+                 Button_Save_CurrenDay
+                 )
 
 
 
