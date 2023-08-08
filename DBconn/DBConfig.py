@@ -1,9 +1,12 @@
 
+
+
 import csv
 import mysql.connector
 import configparser
 import os
 
+from tkinter import Tk
 from tkinter.filedialog import asksaveasfilename
 
 #! Lese aktuelle Datenbank daten
@@ -37,11 +40,6 @@ def Read_Config():
 
 
 
-
-
-
-
-
 #! Schreibe die aktuellen Zugangsdaten der Config Datenbank  
 def Write_Config(host, user, database):
          
@@ -66,8 +64,6 @@ def Write_Config(host, user, database):
     # Konfigurationsdaten in die Datei schreiben
     with open(config_file_path, 'w') as config_file:
         config.write(config_file)
-
-
 
 
 
