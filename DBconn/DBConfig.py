@@ -10,31 +10,40 @@ from tkinter.filedialog import asksaveasfilename
 
 #! Lese aktuelle Datenbank daten
 def Read_Config():
-  
-    
     # Bestimme den Pfad zum Verzeichnis der Python-Datei
     script_directory = os.path.dirname(os.path.abspath(__file__))
 
     # Konstruiere den Pfad zur config.ini-Datei
     config_file_path = os.path.join(script_directory, 'config.ini')
 
-    # Konfigurationsdatei erstellen oder laden
+    # Erstelle ein ConfigParser-Objekt
     config = configparser.ConfigParser()
-    config.read(config_file_path)
-    # Informationen aus der Konfigurationsdatei lesen
-    host = config.get('Database', 'Host')
-    user = config.get('Database', 'User')
-    database = config.get('Database', 'Database')
 
-    #defeniere zu übergebende Variablen
+    # Überprüfe, ob die Konfigurationsdatei existiert
+    if not os.path.isfile(config_file_path):
+        print(f"Konfigurationsdatei nicht gefunden: {config_file_path}")
+        return {'t_host': '', 't_user': '', 't_database': ''}
+
+    # Lese die Konfigurationsdatei
+    config.read(config_file_path)
+
+    # Versuche, die Konfigurationswerte zu lesen
+    try:
+        host = config.get('Database', 'Host')
+        user = config.get('Database', 'User')
+        database = config.get('Database', 'Database')
+    except (configparser.NoSectionError, configparser.NoOptionError) as e:
+        print(f"Fehler beim Lesen der Konfiguration: {e}")
+        return {'t_host': '', 't_user': '', 't_database': ''}
+
+    # Definiere zu übergebende Variablen
     transfer_variables = {
-        't_host' : host,
-        't_user' : user,
-        't_database' : database 
+        't_host': host,
+        't_user': user,
+        't_database': database
     }
 
     return transfer_variables
-
 
 
 
