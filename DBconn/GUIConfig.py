@@ -33,7 +33,7 @@ def HomeScreenConfig(Main_GUI, host, user, database,
 
 
     frame = tk.Frame(Main_GUI)
-    frame.grid(row=0, column=0, sticky="news")
+    frame.pack
  
     user_frame_1 = tk.LabelFrame(frame, text="User Information")
     user_frame_1.grid(row=0, column=0, sticky="news", padx=0 , pady=0) 
