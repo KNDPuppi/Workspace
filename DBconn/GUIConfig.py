@@ -30,41 +30,41 @@ def HomeScreenConfig(Main_GUI, host, user, database,
     Main_GUI.title("DB Collector")
     Main_GUI.geometry("800x400")
 
-    frame1 = tk.Frame(Main_GUI)
-    frame1.pack()
 
-    frame2 = tk.Frame(Main_GUI)
-    frame2.pack()
-          
-        
+
+    frame = tk.Frame(Main_GUI)
+    frame.pack() 
+ 
+    user_frame_1 = tk.LabelFrame(frame, text="User Information")
+    user_frame_1.grid(row=0, column=0, sticky="news", padx=20 , pady=20) 
+     
     # Eingabefeld für das Datum hinzufügen
-    entry_Date = DateEntry(frame1, date_pattern="yyyy-mm-dd")
+    entry_Date = DateEntry(user_frame_1, date_pattern="yyyy-mm-dd")
     entry_Date.pack()
 
 
-
      # Eingabefeld für das host
-    entry_host = Label(frame2, text="Host ")
+    entry_host = Label(user_frame_1, text="Host ")
     entry_host.pack()
-    entry_host = Entry(frame2)
+    entry_host = Entry(user_frame_1)
     entry_host.pack()
 
       # Eingabefeld für root
-    entry_user = Label(frame2, text="user ")
+    entry_user = Label(user_frame_1, text="user ")
     entry_user.pack()
-    entry_user = Entry(frame2)
+    entry_user = Entry(user_frame_1)
     entry_user.pack()
 
       # Eingabefeld für Database
-    entry_db = Label(frame2, text="database ")
+    entry_db = Label(user_frame_1, text="database ")
     entry_db.pack()
-    entry_db = Entry(frame2)
+    entry_db = Entry(user_frame_1)
     entry_db.pack()
 
           # Eingabefeld für root
-    entry_pw = Label(frame2, text="Password ")
+    entry_pw = Label(user_frame_1, text="Password ")
     entry_pw.pack()
-    entry_pw = Entry(master=frame2)
+    entry_pw = Entry(user_frame_1)
     entry_pw.pack()
   
 
