@@ -33,41 +33,34 @@ def HomeScreenConfig(Main_GUI, host, user, database,
 
 
     frame = tk.Frame(Main_GUI)
-    frame.pack() 
+    frame.grid(row=0, column=0, sticky="news")
  
     user_frame_1 = tk.LabelFrame(frame, text="User Information")
-    user_frame_1.grid(row=0, column=0, sticky="news", padx=20 , pady=20) 
+    user_frame_1.grid(row=0, column=0, sticky="news", padx=0 , pady=0) 
      
     # Eingabefeld für das Datum hinzufügen
     entry_Date = DateEntry(user_frame_1, date_pattern="yyyy-mm-dd")
-    entry_Date.pack()
-
-
+    
+    
      # Eingabefeld für das host
     entry_host = Label(user_frame_1, text="Host ")
-    entry_host.pack()
+    entry_host.grid(row=0, column=0)
     entry_host = Entry(user_frame_1)
-    entry_host.pack()
+    entry_host.grid(row=0, column=0)
 
       # Eingabefeld für root
     entry_user = Label(user_frame_1, text="user ")
-    entry_user.pack()
+    entry_user.grid(row=0, column=0)
     entry_user = Entry(user_frame_1)
-    entry_user.pack()
+    entry_user.grid(row=0, column=0)
 
       # Eingabefeld für Database
     entry_db = Label(user_frame_1, text="database ")
-    entry_db.pack()
+    entry_db.grid(row=0, column=0)
     entry_db = Entry(user_frame_1)
-    entry_db.pack()
+    entry_db.grid(row=0, column=0)
 
-          # Eingabefeld für root
-    entry_pw = Label(user_frame_1, text="Password ")
-    entry_pw.pack()
-    entry_pw = Entry(user_frame_1)
-    entry_pw.pack()
-  
-
+    
     entry_host.insert(0, host)  # Führe die Einfügung erst nach dem Lesen der Konfigurationswerte durch
     entry_user.insert(0, user)
     entry_db.insert(0, database)
@@ -82,13 +75,13 @@ def HomeScreenConfig(Main_GUI, host, user, database,
 
     # Button Speichere DB_Configdaten
     button_writeDB = Button(Main_GUI, text="Save DB Config", command=lambda: button_function_WrDB(entry_host.get(), entry_user.get(), entry_db.get()))
-    button_writeDB.pack()  
+    button_writeDB.grid(row=0, column=0)
 
     # Button SAVE All
     button_SaveDB_ALL = Button(Main_GUI, text="Save DB ALL", command=button_function_Save_all)
-    button_SaveDB_ALL.pack()  
+    button_SaveDB_ALL.grid(row=0, column=0)
 
     # Button SAVE Day
     button_SaveDB_Day = Button(Main_GUI, text="Save DB Day", command=lambda: button_function_Save_Day(entry_Date.get()))
-    button_SaveDB_Day.pack() 
+    button_SaveDB_Day.grid(row=0, column=0) 
    
