@@ -36,7 +36,7 @@ def HomeScreenConfig(Main_GUI, host, user, database,
     frame.pack
  
     user_frame_1 = tk.LabelFrame(frame, text="User Information")
-    user_frame_1.grid(row=0, column=0, sticky="news", padx=20 , pady=20) 
+    user_frame_1.grid(row=0, column=0, sticky="news", padx=20 , pady=10) 
      
     # Eingabefeld für das Datum hinzufügen
     entry_Date = DateEntry(user_frame_1, date_pattern="yyyy-mm-dd")
@@ -75,13 +75,13 @@ def HomeScreenConfig(Main_GUI, host, user, database,
 
     # Button Speichere DB_Configdaten
     button_writeDB = Button(Main_GUI, text="Save DB Config", command=lambda: button_function_WrDB(entry_host.get(), entry_user.get(), entry_db.get()))
-    button_writeDB.grid(row=0, column=0)
+    button_writeDB.grid(row=3, column=0)
 
     # Button SAVE All
     button_SaveDB_ALL = Button(Main_GUI, text="Save DB ALL", command=button_function_Save_all)
-    button_SaveDB_ALL.grid(row=0, column=0)
+    button_SaveDB_ALL.grid(row=3, column=1)
 
     # Button SAVE Day
     button_SaveDB_Day = Button(Main_GUI, text="Save DB Day", command=lambda: button_function_Save_Day(entry_Date.get()))
-    button_SaveDB_Day.grid(row=0, column=0) 
+    button_SaveDB_Day.grid(row=3, column=2) 
    
