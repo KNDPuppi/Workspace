@@ -40,25 +40,25 @@ def HomeScreenConfig(Main_GUI, host, user, database,
      
     # Eingabefeld für das Datum hinzufügen
     entry_Date = DateEntry(user_frame_1, date_pattern="yyyy-mm-dd")
-    
-    
+    entry_Date.grid(row=0, column=1)
+   
      # Eingabefeld für das host
     entry_host = Label(user_frame_1, text="Host ")
-    entry_host.grid(row=0, column=0)
+    entry_host.grid(row=2, column=3)
     entry_host = Entry(user_frame_1)
-    entry_host.grid(row=0, column=0)
+    entry_host.grid(row=2, column=4)
 
       # Eingabefeld für root
     entry_user = Label(user_frame_1, text="user ")
-    entry_user.grid(row=0, column=0)
+    entry_user.grid(row=2, column=5)
     entry_user = Entry(user_frame_1)
-    entry_user.grid(row=0, column=0)
+    entry_user.grid(row=2, column=6)
 
       # Eingabefeld für Database
     entry_db = Label(user_frame_1, text="database ")
-    entry_db.grid(row=0, column=0)
+    entry_db.grid(row=2, column=7)
     entry_db = Entry(user_frame_1)
-    entry_db.grid(row=0, column=0)
+    entry_db.grid(row=2, column=8)
 
     
     entry_host.insert(0, host)  # Führe die Einfügung erst nach dem Lesen der Konfigurationswerte durch
