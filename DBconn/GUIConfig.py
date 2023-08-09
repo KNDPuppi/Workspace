@@ -36,7 +36,7 @@ def HomeScreenConfig(Main_GUI, host, user, database,
     frame.pack
  
     user_frame_1 = tk.LabelFrame(frame, text="User Information")
-    user_frame_1.grid(row=0, column=0, sticky="news", padx=0 , pady=0) 
+    user_frame_1.grid(row=0, column=0, sticky="news", padx=20 , pady=20) 
      
     # Eingabefeld für das Datum hinzufügen
     entry_Date = DateEntry(user_frame_1, date_pattern="yyyy-mm-dd")
