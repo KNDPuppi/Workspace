@@ -28,11 +28,8 @@ def HomeScreenConfig(Main_GUI, host, user, database,
         style.theme_use(themename="dark")
 
     Main_GUI.title("DB Collector")
-    Main_GUI.geometry("800x400")
 
-
-
-    frame = tk.Frame(Main_GUI)
+    frame = tk.Frame(Main_GUI, width=800, height=400)  
     frame.pack
  
     user_frame_1 = tk.LabelFrame(frame, text="User Information")
