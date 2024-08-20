@@ -78,80 +78,93 @@ def Write_Config(host, user, database):
 
 #! def- Schreibe alle Daten aus Datenbank in ein Excelfile (mit asksaveasfilename)  
 def DBSaveAll(host, user, database):
-    
-    
-    db_connection = mysql.connector.connect(
-    host= host,
-    user=user,
-    database=database
-    )
-    cursor = db_connection.cursor()
+    try:
+        # Stelle die Verbindung zur Datenbank her
+        db_connection = mysql.connector.connect(
+            host=host,
+            user=user,
+            database=database
+        )
+        cursor = db_connection.cursor()
 
-    select_query = "SELECT * FROM prozessdaten"
-    cursor.execute(select_query)
-    results = cursor.fetchall()
+        # Führe die SQL-Abfrage aus
+        select_query = "SELECT * FROM prozessdaten"
+        cursor.execute(select_query)
+        results = cursor.fetchall()
 
-    root = Tk()
-    root.withdraw()
+        # Öffne einen Dialog zum Speichern der CSV-Datei
+        root = Tk()
+        root.withdraw()
 
-    file_path = asksaveasfilename(defaultextension=".csv", filetypes=[("CSV Dateien", "*.csv")])
+        file_path = asksaveasfilename(defaultextension=".csv", filetypes=[("CSV Dateien", "*.csv")])
+        if not file_path:
+            return  # Benutzer hat den Datei-Speicher-Dialog abgebrochen
 
-     # CSV-Datei zum Schreiben öffnen
-    with open(file_path, 'w', newline='') as csv_file:
-        csv_writer = csv.writer(csv_file)
+        # Schreibe die Daten in die CSV-Datei
+        with open(file_path, 'w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            column_names = [i[0] for i in cursor.description]
+            csv_writer.writerow(column_names)
+            csv_writer.writerows(results)
 
-        # Spaltennamen schreiben
-        column_names = [i[0] for i in cursor.description]
-        csv_writer.writerow(column_names)
-
-        # Daten in CSV schreiben
-        csv_writer.writerows(results)
-
-    # Verbindung und Cursor schließen
-    cursor.close()
-    db_connection.close()
-     # Schließe das Wurzelfenster, nachdem die Aktionen abgeschlossen sind
-    root.destroy()
-
-
+    except mysql.connector.Error as err:
+        print(f"Fehler bei der Datenbankabfrage: {err}")
+    except IOError as e:
+        print(f"Fehler beim Schreiben der Datei: {e}")
+    finally:
+        # Schließe Verbindung und Cursor
+        try:
+            cursor.close()
+            db_connection.close()
+        except:
+            pass
+        # Schließe das Wurzelfenster
+        root.destroy()
 
 
 
 #! def- Schreibe alle Daten eines Tages in ein Excelfile (mit asksaveasfilename)
 def DBSaveCurDay(host, user, database, inputDay):
-    
-    db_connection = mysql.connector.connect(
-    host= host,
-    user=user,
-    database=database
-    )
-    cursor = db_connection.cursor()
-    date= inputDay
+    try:
+        # Stelle die Verbindung zur Datenbank her
+        db_connection = mysql.connector.connect(
+            host=host,
+            user=user,
+            database=database
+        )
+        cursor = db_connection.cursor()
+        date = inputDay
 
-   
-    select_query = "SELECT * FROM prozessdaten WHERE DATE(timestamp) = '" + date + "'"
-    cursor.execute(select_query)
-    results = cursor.fetchall()
+        # Führe die SQL-Abfrage aus
+        select_query = "SELECT * FROM prozessdaten WHERE DATE(timestamp) = %s"
+        cursor.execute(select_query, (date,))
+        results = cursor.fetchall()
 
+        # Öffne einen Dialog zum Speichern der CSV-Datei
+        root = Tk()
+        root.withdraw()
 
-    root = Tk()
-    root.withdraw()
+        file_path = asksaveasfilename(defaultextension=".csv", filetypes=[("CSV Dateien", "*.csv")])
+        if not file_path:
+            return  # Benutzer hat den Datei-Speicher-Dialog abgebrochen
 
-    file_path = asksaveasfilename(defaultextension=".csv", filetypes=[("CSV Dateien", "*.csv")])
+        # Schreibe die Daten in die CSV-Datei
+        with open(file_path, 'w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            column_names = [i[0] for i in cursor.description]
+            csv_writer.writerow(column_names)
+            csv_writer.writerows(results)
 
-     # CSV-Datei zum Schreiben öffnen
-    with open(file_path, 'w', newline='') as csv_file:
-        csv_writer = csv.writer(csv_file)
-
-        # Spaltennamen schreiben
-        column_names = [i[0] for i in cursor.description]
-        csv_writer.writerow(column_names)
-
-        # Daten in CSV schreiben
-        csv_writer.writerows(results)
-
-   # Verbindung und Cursor schließen
-    cursor.close()
-    db_connection.close()
-     # Schließe das Wurzelfenster, nachdem die Aktionen abgeschlossen sind
-    root.destroy()    
+    except mysql.connector.Error as err:
+        print(f"Fehler bei der Datenbankabfrage: {err}")
+    except IOError as e:
+        print(f"Fehler beim Schreiben der Datei: {e}")
+    finally:
+        # Schließe Verbindung und Cursor
+        try:
+            cursor.close()
+            db_connection.close()
+        except:
+            pass
+        # Schließe das Wurzelfenster
+        root.destroy()
