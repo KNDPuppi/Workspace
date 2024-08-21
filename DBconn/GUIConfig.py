@@ -8,7 +8,8 @@ def HomeScreenConfig(Main_GUI, host, user, database,
                      button_function_WrDB,
                      button_function_Save_all,
                      button_function_Save_Day,
-                     button_function_SetSavePath):
+                     button_function_SetSavePath_All,
+                     button_function_SetSavePath_Day):
     try:
         style = ttk.Style(Main_GUI)
 
@@ -58,31 +59,36 @@ def HomeScreenConfig(Main_GUI, host, user, database,
         Label(user_frame_1, text="Database").grid(row=3, column=0)
         entry_db.grid(row=3, column=1)
 
-        # Neuer Button für den Speicherort
-        button_set_save_path = Button(user_frame_1, text="Set Save Path", width=20, height=4, command=button_function_SetSavePath)
-        button_set_save_path.grid(row=4, column=0, columnspan=2, sticky="e")
+        # Buttons und Labels für den Speicherort
+        button_set_save_path_all = Button(user_frame_1, text="Set Save Path All", width=20, height=4, command=button_function_SetSavePath_All)
+        button_set_save_path_all.grid(row=4, column=0, columnspan=2, sticky="e")
 
-        # Label, um den aktuellen Speicherpfad anzuzeigen
-        save_path_label = Label(user_frame_1, text="Save Path: Not Set")
-        save_path_label.grid(row=5, column=0, columnspan=2, sticky="w")
+        save_path_label_all = Label(user_frame_1, text="Save Path All: Not Set")
+        save_path_label_all.grid(row=5, column=0, columnspan=2, sticky="w")
+
+        button_set_save_path_day = Button(user_frame_1, text="Set Save Path Day", width=20, height=4, command=button_function_SetSavePath_Day)
+        button_set_save_path_day.grid(row=6, column=0, columnspan=2, sticky="e")
+
+        save_path_label_day = Label(user_frame_1, text="Save Path Day: Not Set")
+        save_path_label_day.grid(row=7, column=0, columnspan=2, sticky="w")
 
         # Buttons für DB-Operationen
         button_width = 20  # Breite der Buttons
         button_height = 4  # Höhe der Buttons
 
         Button(user_frame_1, text="Save DB Config", width=button_width, height=button_height,
-               command=lambda: button_function_WrDB(entry_host.get(), entry_user.get(), entry_db.get())).grid(row=6, column=0, columnspan=2, sticky="e")
+               command=lambda: button_function_WrDB(entry_host.get(), entry_user.get(), entry_db.get())).grid(row=8, column=0, columnspan=2, sticky="e")
 
         Button(user_frame_1, text="Save DB ALL", width=button_width, height=button_height,
-               command=button_function_Save_all).grid(row=7, column=0, columnspan=2, sticky="e")
+               command=button_function_Save_all).grid(row=9, column=0, columnspan=2, sticky="e")
 
         Button(user_frame_1, text="Save DB Day", width=button_width, height=button_height,
-               command=lambda: button_function_Save_Day(entry_Date.get())).grid(row=8, column=0, columnspan=2, sticky="e")
+               command=lambda: button_function_Save_Day(entry_Date.get())).grid(row=10, column=0, columnspan=2, sticky="e")
 
         for widget in user_frame_1.winfo_children():
             widget.grid_configure(padx=20, pady=5)
 
-        return save_path_label
+        return save_path_label_all, save_path_label_day
 
     except Exception as e:
         print(f"Fehler beim Erstellen der GUI: {e}")

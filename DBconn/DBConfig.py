@@ -79,7 +79,6 @@ def Write_Config(host, user, database):
 #! def- Schreibe alle Daten aus Datenbank in ein Excelfile (mit asksaveasfilename)  
 def DBSaveAll(host, user, database, save_path):
     try:
-        # Stelle die Verbindung zur Datenbank her
         db_connection = mysql.connector.connect(
             host=host,
             user=user,
@@ -87,20 +86,16 @@ def DBSaveAll(host, user, database, save_path):
         )
         cursor = db_connection.cursor()
 
-        # Führe die SQL-Abfrage aus
         select_query = "SELECT * FROM prozessdaten"
         cursor.execute(select_query)
         results = cursor.fetchall()
 
-        # Prüfe, ob der Pfad gesetzt ist
-        if not save_path:
-            print("Speicherpfad ist nicht gesetzt.")
-            return
+        root = Tk()
+        root.withdraw()
 
-        # Füge einen Dateinamen hinzu
-        file_path = os.path.join(save_path, 'data_all.csv')
+        # Dateiname definieren
+        file_path = os.path.join(save_path, "DB_All.csv")
 
-        # Schreibe die Daten in die CSV-Datei
         with open(file_path, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
             column_names = [i[0] for i in cursor.description]
@@ -112,41 +107,32 @@ def DBSaveAll(host, user, database, save_path):
     except IOError as e:
         print(f"Fehler beim Schreiben der Datei: {e}")
     finally:
-        # Schließe Verbindung und Cursor
         try:
             cursor.close()
             db_connection.close()
         except:
             pass
+        root.destroy()
 
-
-
-#! def- Schreibe alle Daten eines Tages in ein Excelfile (mit asksaveasfilename)
-def DBSaveCurDay(host, user, database, inputDay):
+def DBSaveCurDay(host, user, database, inputDay, save_path):
     try:
-        # Stelle die Verbindung zur Datenbank her
         db_connection = mysql.connector.connect(
             host=host,
             user=user,
             database=database
         )
         cursor = db_connection.cursor()
-        date = inputDay
 
-        # Führe die SQL-Abfrage aus
         select_query = "SELECT * FROM prozessdaten WHERE DATE(timestamp) = %s"
-        cursor.execute(select_query, (date,))
+        cursor.execute(select_query, (inputDay,))
         results = cursor.fetchall()
 
-        # Öffne einen Dialog zum Speichern der CSV-Datei
         root = Tk()
         root.withdraw()
 
-        file_path = asksaveasfilename(defaultextension=".csv", filetypes=[("CSV Dateien", "*.csv")])
-        if not file_path:
-            return  # Benutzer hat den Datei-Speicher-Dialog abgebrochen
+        # Dateiname definieren
+        file_path = os.path.join(save_path, f"DB_Day_{inputDay}.csv")
 
-        # Schreibe die Daten in die CSV-Datei
         with open(file_path, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
             column_names = [i[0] for i in cursor.description]
@@ -158,11 +144,9 @@ def DBSaveCurDay(host, user, database, inputDay):
     except IOError as e:
         print(f"Fehler beim Schreiben der Datei: {e}")
     finally:
-        # Schließe Verbindung und Cursor
         try:
             cursor.close()
             db_connection.close()
         except:
             pass
-        # Schließe das Wurzelfenster
         root.destroy()
