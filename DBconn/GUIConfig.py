@@ -26,87 +26,75 @@ def HomeScreenConfig(Main_GUI, host, user, database,
         if theme == 0:
             style.theme_use(themename="clam")
         else:
-            style.theme_use(themename="dark")
+            style.theme_use(themename="default")
 
-        Main_GUI.title("DB Collector")
+        Main_GUI.title("FTS-DB")
 
-        frame = tk.Frame(Main_GUI)
-        frame.pack(fill="both", expand=True)
+        # GUI-Größe und Position
+        window_width = 450
+        window_height = 300
+        screen_width = Main_GUI.winfo_screenwidth()
+        screen_height = Main_GUI.winfo_screenheight()
+        position_top = int(screen_height / 2 - window_height / 2)
+        position_right = int(screen_width / 2 - window_width / 2)
+        Main_GUI.geometry(f'{window_width}x{window_height}+{position_right}+{position_top}')
 
-        user_frame_1 = tk.LabelFrame(frame, text="User Information")
-        user_frame_1.grid(row=0, column=0, padx=20, pady=10, sticky="news")
+        Label(Main_GUI, text="Host:").grid(row=0, column=0, sticky='w')
+        Label(Main_GUI, text="Benutzername:").grid(row=1, column=0, sticky='w')
+        Label(Main_GUI, text="Datenbank:").grid(row=2, column=0, sticky='w')
 
-        # Eingabefeld für das Datum hinzufügen
-        entry_Date = DateEntry(user_frame_1, date_pattern="yyyy-mm-dd", width=20)
-        entry_Date.grid(row=0, column=1)
+        host_entry = ttk.Entry(Main_GUI)
+        host_entry.insert(0, host)
+        host_entry.grid(row=0, column=1, padx=10, pady=5)
 
-        # Eingabefelder
-        entry_host = ttk.Entry(user_frame_1, width=30, justify="right")
-        entry_host.grid(row=1, column=1)
-        entry_host.insert(0, host)
+        user_entry = ttk.Entry(Main_GUI)
+        user_entry.insert(0, user)
+        user_entry.grid(row=1, column=1, padx=10, pady=5)
 
-        entry_user = ttk.Entry(user_frame_1, width=30, justify="right")
-        entry_user.grid(row=2, column=1)
-        entry_user.insert(0, user)
+        db_entry = ttk.Entry(Main_GUI)
+        db_entry.insert(0, database)
+        db_entry.grid(row=2, column=1, padx=10, pady=5)
 
-        entry_db = ttk.Entry(user_frame_1, width=30, justify="right")
-        entry_db.grid(row=3, column=1)
-        entry_db.insert(0, database)
+        Button_save_DB_config = ttk.Button(Main_GUI, text="Write Config", command=lambda: button_function_WrDB(host_entry.get(), user_entry.get(), db_entry.get()))
+        Button_save_DB_config.grid(row=3, column=0, columnspan=2, pady=10)
 
-        Label(user_frame_1, text="Host").grid(row=1, column=0)
-        Label(user_frame_1, text="User").grid(row=2, column=0)
-        Label(user_frame_1, text="Database").grid(row=3, column=0)
+        # Speichern aller Daten
+        Button_Save_all = ttk.Button(Main_GUI, text="Save DB All", command=button_function_Save_all)
+        Button_Save_all.grid(row=4, column=0, columnspan=2, pady=5)
 
-        # Zeige die gespeicherten Pfade an
-        Label(user_frame_1, text="Save Path All").grid(row=8, column=0)
-        save_path_all_label = Label(user_frame_1, textvariable=save_path_all_var, fg="gray", wraplength=400)
-        save_path_all_label.grid(row=8, column=1)
+        # Speichern der Tagesdaten
+        Label(Main_GUI, text="Wähle Datum:").grid(row=5, column=0, sticky='w')
+        date_entry = DateEntry(Main_GUI, date_pattern='yyyy-mm-dd')
+        date_entry.grid(row=5, column=1, padx=10, pady=5)
 
-        Label(user_frame_1, text="Save Path Day").grid(row=9, column=0)
-        save_path_day_label = Label(user_frame_1, textvariable=save_path_day_var, fg="gray", wraplength=400)
-        save_path_day_label.grid(row=9, column=1)
+        Button_Save_Day = ttk.Button(Main_GUI, text="Save DB Day", command=lambda: button_function_Save_Day(date_entry.get()))
+        Button_Save_Day.grid(row=6, column=0, columnspan=2, pady=5)
 
-        Button(user_frame_1, text="...", width=3,
-               command=lambda: select_save_path_all(save_path_all_var)).grid(row=8, column=2)
-        Button(user_frame_1, text="...", width=3,
-               command=lambda: select_save_path_day(save_path_day_var)).grid(row=9, column=2)
+        # Pfad für alle Daten
+        Label(Main_GUI, text="Pfad für alle Daten:").grid(row=7, column=0, sticky='w')
+        save_path_all_entry = ttk.Entry(Main_GUI, textvariable=save_path_all_var, width=30)
+        save_path_all_entry.grid(row=7, column=1, padx=10, pady=5)
 
-        # Eingabefeld für die Zeit hinzufügen
-        Label(user_frame_1, text="Scheduled Time").grid(row=10, column=0)
-        entry_time = ttk.Entry(user_frame_1, width=10, justify="right", textvariable=scheduled_time_var)
-        entry_time.grid(row=10, column=1)
+        Button_save_path_all = ttk.Button(Main_GUI, text="Browse", command=lambda: browse_directory(save_path_all_var))
+        Button_save_path_all.grid(row=7, column=2, padx=5, pady=5)
 
-        # Buttons
-        button_width = 20  # Ändere die Breite nach Bedarf
-        button_height = 4
+        # Pfad für Tagesdaten
+        Label(Main_GUI, text="Pfad für Tagesdaten:").grid(row=8, column=0, sticky='w')
+        save_path_day_entry = ttk.Entry(Main_GUI, textvariable=save_path_day_var, width=30)
+        save_path_day_entry.grid(row=8, column=1, padx=10, pady=5)
 
-        Button(user_frame_1, text="Save DB Config", width=button_width, height=button_height,
-               command=lambda: button_function_WrDB(entry_host.get(), entry_user.get(), entry_db.get())).grid(row=4, column=0, columnspan=3, sticky="e")
+        Button_save_path_day = ttk.Button(Main_GUI, text="Browse", command=lambda: browse_directory(save_path_day_var))
+        Button_save_path_day.grid(row=8, column=2, padx=5, pady=5)
 
-        Button(user_frame_1, text="Save DB ALL", width=button_width, height=button_height,
-               command=button_function_Save_all).grid(row=5, column=0, columnspan=3, sticky="e")
+        # Automatische Ausführungszeit
+        Label(Main_GUI, text="Automatische Ausführung (HH:MM):").grid(row=9, column=0, sticky='w')
+        scheduled_time_entry = ttk.Entry(Main_GUI, textvariable=scheduled_time_var, width=10)
+        scheduled_time_entry.grid(row=9, column=1, padx=10, pady=5)
 
-        Button(user_frame_1, text="Save DB Day", width=button_width, height=button_height,
-               command=lambda: button_function_Save_Day(entry_Date.get())).grid(row=6, column=0, columnspan=3, sticky="e")
-
-        Button(user_frame_1, text="DB Config", width=button_width, height=button_height,
-               command=lambda: open_database_settings(Main_GUI)).grid(row=7, column=0, columnspan=3, sticky="e")
-
-        for widget in user_frame_1.winfo_children():
-            widget.grid_configure(padx=20, pady=5)
     except Exception as e:
-        print(f"Fehler beim Erstellen der GUI: {e}")
+        print(f"Fehler bei der GUI-Konfiguration: {e}")
 
-def select_save_path_all(save_path_var):
-    path = askdirectory(title="Select Directory for Saving All Data")
-    if path:
-        save_path_var.set(path)
-
-def select_save_path_day(save_path_var):
-    path = askdirectory(title="Select Directory for Saving Daily Data")
-    if path:
-        save_path_var.set(path)
-
-def open_database_settings(Main_GUI):
-    db_settings_window = Toplevel(Main_GUI)
-    db_settings_window.title("Database Settings")
+def browse_directory(path_variable):
+    directory = askdirectory()
+    if directory:
+        path_variable.set(directory)

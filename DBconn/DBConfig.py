@@ -2,9 +2,9 @@ import configparser
 import os
 import mysql.connector
 import csv
-from tkinter import Tk
-from tkinter.filedialog import asksaveasfilename
 import datetime
+from tkinter import Tk
+from tkinter.filedialog import asksaveasfilename, askdirectory
 
 def Read_Config():
     script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -13,14 +13,7 @@ def Read_Config():
     config = configparser.ConfigParser()
     if not os.path.isfile(config_file_path):
         print(f"Konfigurationsdatei nicht gefunden: {config_file_path}")
-        return {
-            't_host': '',
-            't_user': '',
-            't_database': '',
-            'save_path_all': '',
-            'save_path_day': '',
-            'scheduled_time': '00:00'  # Standardzeit
-        }
+        return {'t_host': '', 't_user': '', 't_database': '', 'save_path_all': '', 'save_path_day': '', 'scheduled_time': ''}
 
     config.read(config_file_path)
 
@@ -33,16 +26,9 @@ def Read_Config():
         scheduled_time = config.get('Settings', 'ScheduledTime')
     except (configparser.NoSectionError, configparser.NoOptionError) as e:
         print(f"Fehler beim Lesen der Konfiguration: {e}")
-        return {
-            't_host': '',
-            't_user': '',
-            't_database': '',
-            'save_path_all': '',
-            'save_path_day': '',
-            'scheduled_time': '00:00'
-        }
+        return {'t_host': '', 't_user': '', 't_database': '', 'save_path_all': '', 'save_path_day': '', 'scheduled_time': ''}
 
-    return {
+    transfer_variables = {
         't_host': host,
         't_user': user,
         't_database': database,
@@ -50,6 +36,8 @@ def Read_Config():
         'save_path_day': save_path_day,
         'scheduled_time': scheduled_time
     }
+
+    return transfer_variables
 
 def Write_Config(host, user, database, save_path_all, save_path_day, scheduled_time):
     script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -85,25 +73,11 @@ def DBSaveAll(host, user, database, save_path_all):
         cursor.execute(select_query)
         results = cursor.fetchall()
 
-        # Wenn der Speicherpfad nicht angegeben ist, öffne den Dateidialog
-        if not save_path_all:
-            root = Tk()
-            root.withdraw()
-            save_path_all = asksaveasfilename(
-                defaultextension=".csv",
-                filetypes=[("CSV Dateien", "*.csv")],
-                initialfile=f"data_all_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
-            )
-            if not save_path_all:
-                return  # Benutzer hat den Datei-Speicher-Dialog abgebrochen
-            root.destroy()
+        # Erzeuge einen Dateinamen mit Zeitstempel
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        file_path = os.path.join(save_path_all, f"all_data_{timestamp}.csv")
 
-        # Überprüfen, ob das Verzeichnis existiert, und ggf. erstellen
-        directory = os.path.dirname(save_path_all)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-
-        with open(save_path_all, 'w', newline='') as csv_file:
+        with open(file_path, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
             column_names = [i[0] for i in cursor.description]
             csv_writer.writerow(column_names)
@@ -128,30 +102,15 @@ def DBSaveCurDay(host, user, database, inputDay, save_path_day):
             database=database
         )
         cursor = db_connection.cursor()
-        date = inputDay
         select_query = "SELECT * FROM prozessdaten WHERE DATE(timestamp) = %s"
-        cursor.execute(select_query, (date,))
+        cursor.execute(select_query, (inputDay,))
         results = cursor.fetchall()
 
-        # Wenn der Speicherpfad nicht angegeben ist, öffne den Dateidialog
-        if not save_path_day:
-            root = Tk()
-            root.withdraw()
-            save_path_day = asksaveasfilename(
-                defaultextension=".csv",
-                filetypes=[("CSV Dateien", "*.csv")],
-                initialfile=f"data_day_{date}.csv"
-            )
-            if not save_path_day:
-                return  # Benutzer hat den Datei-Speicher-Dialog abgebrochen
-            root.destroy()
+        # Erzeuge einen Dateinamen mit Datum und Zeitstempel
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        file_path = os.path.join(save_path_day, f"daily_data_{inputDay}_{timestamp}.csv")
 
-        # Überprüfen, ob das Verzeichnis existiert, und ggf. erstellen
-        directory = os.path.dirname(save_path_day)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-
-        with open(save_path_day, 'w', newline='') as csv_file:
+        with open(file_path, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
             column_names = [i[0] for i in cursor.description]
             csv_writer.writerow(column_names)
