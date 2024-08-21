@@ -85,6 +85,7 @@ def Write_Config(host, user, database, save_path_all='', save_path_day=''):
 #! def- Schreibe alle Daten aus Datenbank in ein Excelfile (mit asksaveasfilename)  
 def DBSaveAll(host, user, database, save_path):
     try:
+        # Stelle die Verbindung zur Datenbank her
         db_connection = mysql.connector.connect(
             host=host,
             user=user,
@@ -92,17 +93,13 @@ def DBSaveAll(host, user, database, save_path):
         )
         cursor = db_connection.cursor()
 
+        # Führe die SQL-Abfrage aus
         select_query = "SELECT * FROM prozessdaten"
         cursor.execute(select_query)
         results = cursor.fetchall()
 
-        root = Tk()
-        root.withdraw()
-
-        # Dateiname definieren
-        file_path = os.path.join(save_path, "DB_All.csv")
-
-        with open(file_path, 'w', newline='') as csv_file:
+        # Schreibe die Daten in die CSV-Datei
+        with open(save_path, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
             column_names = [i[0] for i in cursor.description]
             csv_writer.writerow(column_names)
@@ -113,12 +110,12 @@ def DBSaveAll(host, user, database, save_path):
     except IOError as e:
         print(f"Fehler beim Schreiben der Datei: {e}")
     finally:
+        # Schließe Verbindung und Cursor
         try:
             cursor.close()
             db_connection.close()
         except:
             pass
-        root.destroy()
 
 def DBSaveCurDay(host, user, database, inputDay, save_path):
     try:
