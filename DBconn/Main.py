@@ -6,8 +6,13 @@ import threading
 import time
 import datetime
 
+# Globale Variable für die geplante Zeit
+scheduled_time_str = ""
+
 def Button_write_DB_config(host, user, database):
+    global scheduled_time_str
     Write_Config(host, user, database, save_path_all_var.get(), save_path_day_var.get(), scheduled_time_var.get())
+    scheduled_time_str = scheduled_time_var.get()  # Update the global variable
     messagebox.showinfo("Info", "Datenbankkonfiguration gespeichert!")
 
 def Button_Save_all_data():
@@ -25,6 +30,7 @@ def Button_Save_CurrenDay(inputDay):
     DBSaveCurDay(host, user, database, inputDay, save_path_day_var.get())
 
 def scheduled_task():
+    global scheduled_time_str
     while True:
         now = datetime.datetime.now().time()
         current_time_str = now.strftime("%H:%M")
