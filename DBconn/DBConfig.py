@@ -1,105 +1,84 @@
 
-#! ############################################Importiere Module und Funktionen  ############################################################
-import csv
-import mysql.connector
 import configparser
 import os
-
+import mysql.connector
+import csv
 from tkinter import Tk
-from tkinter.filedialog import asksaveasfilename
+from tkinter.filedialog import asksaveasfilename, askdirectory
 
-#! Lese aktuelle Datenbank daten
 def Read_Config():
-    # Bestimme den Pfad zum Verzeichnis der Python-Datei
     script_directory = os.path.dirname(os.path.abspath(__file__))
-
-    # Konstruiere den Pfad zur config.ini-Datei
     config_file_path = os.path.join(script_directory, 'config.ini')
 
-    # Erstelle ein ConfigParser-Objekt
     config = configparser.ConfigParser()
-
-    # Überprüfe, ob die Konfigurationsdatei existiert
     if not os.path.isfile(config_file_path):
         print(f"Konfigurationsdatei nicht gefunden: {config_file_path}")
-        return {'t_host': '', 't_user': '', 't_database': '', 't_save_path_all': '', 't_save_path_day': ''}
+        return {'t_host': '', 't_user': '', 't_database': '', 'save_path_all': '', 'save_path_day': ''}
 
-    # Lese die Konfigurationsdatei
     config.read(config_file_path)
 
-    # Versuche, die Konfigurationswerte zu lesen
     try:
-        host = config.get('Database', 'host')
-        user = config.get('Database', 'user')
-        database = config.get('Database', 'database')
-        save_path_all = config.get('Paths', 'save_path_all')
-        save_path_day = config.get('Paths', 'save_path_day')
+        host = config.get('Database', 'Host')
+        user = config.get('Database', 'User')
+        database = config.get('Database', 'Database')
+        save_path_all = config.get('Paths', 'SavePathAll')
+        save_path_day = config.get('Paths', 'SavePathDay')
     except (configparser.NoSectionError, configparser.NoOptionError) as e:
         print(f"Fehler beim Lesen der Konfiguration: {e}")
-        return {'t_host': '', 't_user': '', 't_database': '', 't_save_path_all': '', 't_save_path_day': ''}
+        return {'t_host': '', 't_user': '', 't_database': '', 'save_path_all': '', 'save_path_day': ''}
 
-    # Definiere zu übergebende Variablen
     transfer_variables = {
         't_host': host,
         't_user': user,
         't_database': database,
-        't_save_path_all': save_path_all,
-        't_save_path_day': save_path_day
-    }
-
-    return transfer_variables
-
-
-
-
-#! Schreibe die aktuellen Zugangsdaten der Config Datenbank  
-def Write_Config(host, user, database, save_path_all='', save_path_day=''):
-    # Bestimme den Pfad zum Verzeichnis der Python-Datei
-    script_directory = os.path.dirname(os.path.abspath(__file__))
-
-    # Konstruiere den Pfad zur config.ini-Datei
-    config_file_path = os.path.join(script_directory, 'config.ini')
-
-    # Konfigurationsdatei erstellen oder laden
-    config = configparser.ConfigParser()
-    config.read(config_file_path)
-
-    # Aktualisiere die Konfigurationsdaten
-    config['Database'] = {
-        'host': host,
-        'user': user,
-        'database': database
-    }
-    
-    config['Paths'] = {
         'save_path_all': save_path_all,
         'save_path_day': save_path_day
     }
 
-    # Konfigurationsdaten in die Datei schreiben
+    return transfer_variables
+
+def Write_Config(host, user, database, save_path_all, save_path_day):
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+    config_file_path = os.path.join(script_directory, 'config.ini')
+
+    config = configparser.ConfigParser()
+    config.read(config_file_path)
+
+    config['Database'] = {
+        'Host': host,
+        'User': user,
+        'Database': database
+    }
+
+    config['Paths'] = {
+        'SavePathAll': save_path_all,
+        'SavePathDay': save_path_day
+    }
+
     with open(config_file_path, 'w') as config_file:
         config.write(config_file)
 
-
-
-#! def- Schreibe alle Daten aus Datenbank in ein Excelfile (mit asksaveasfilename)  
-def DBSaveAll(host, user, database, save_path):
+def DBSaveAll(host, user, database, save_path_all):
     try:
-        # Stelle die Verbindung zur Datenbank her
         db_connection = mysql.connector.connect(
             host=host,
             user=user,
             database=database
         )
         cursor = db_connection.cursor()
-
-        # Führe die SQL-Abfrage aus
         select_query = "SELECT * FROM prozessdaten"
         cursor.execute(select_query)
         results = cursor.fetchall()
 
-        # Schreibe die Daten in die CSV-Datei
-        with open(save_path, 'w', newline='') as csv_file:
+        if not save_path_all:
+            root = Tk()
+            root.withdraw()
+            save_path_all = asksaveasfilename(defaultextension=".csv", filetypes=[("CSV Dateien", "*.csv")])
+            if not save_path_all:
+                return  # Benutzer hat den Datei-Speicher-Dialog abgebrochen
+            root.destroy()
+
+        with open(save_path_all, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
             column_names = [i[0] for i in cursor.description]
             csv_writer.writerow(column_names)
@@ -110,14 +89,13 @@ def DBSaveAll(host, user, database, save_path):
     except IOError as e:
         print(f"Fehler beim Schreiben der Datei: {e}")
     finally:
-        # Schließe Verbindung und Cursor
         try:
             cursor.close()
             db_connection.close()
         except:
             pass
 
-def DBSaveCurDay(host, user, database, inputDay, save_path):
+def DBSaveCurDay(host, user, database, inputDay, save_path_day):
     try:
         db_connection = mysql.connector.connect(
             host=host,
@@ -125,18 +103,20 @@ def DBSaveCurDay(host, user, database, inputDay, save_path):
             database=database
         )
         cursor = db_connection.cursor()
-
+        date = inputDay
         select_query = "SELECT * FROM prozessdaten WHERE DATE(timestamp) = %s"
-        cursor.execute(select_query, (inputDay,))
+        cursor.execute(select_query, (date,))
         results = cursor.fetchall()
 
-        root = Tk()
-        root.withdraw()
+        if not save_path_day:
+            root = Tk()
+            root.withdraw()
+            save_path_day = asksaveasfilename(defaultextension=".csv", filetypes=[("CSV Dateien", "*.csv")])
+            if not save_path_day:
+                return  # Benutzer hat den Datei-Speicher-Dialog abgebrochen
+            root.destroy()
 
-        # Dateiname definieren
-        file_path = os.path.join(save_path, f"DB_Day_{inputDay}.csv")
-
-        with open(file_path, 'w', newline='') as csv_file:
+        with open(save_path_day, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
             column_names = [i[0] for i in cursor.description]
             csv_writer.writerow(column_names)
@@ -152,4 +132,3 @@ def DBSaveCurDay(host, user, database, inputDay, save_path):
             db_connection.close()
         except:
             pass
-        root.destroy()

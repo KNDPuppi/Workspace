@@ -1,13 +1,8 @@
-#! ############################################Importiere Module und Funktionen  ############################################################
 import tkinter as tk
 import winreg
-
 from tkinter import ttk, Label, Button, Toplevel
 from tkinter.filedialog import askdirectory
 from tkcalendar import DateEntry
-
-#! ############################################Importiere Module und Funktionen Ende ########################################################
-
 
 def HomeScreenConfig(Main_GUI, host, user, database,
                      button_function_WrDB,
@@ -63,35 +58,47 @@ def HomeScreenConfig(Main_GUI, host, user, database,
 
         # Zeige die gespeicherten Pfade an
         Label(user_frame_1, text="Save Path All").grid(row=8, column=0)
-        save_path_all_label = Label(user_frame_1, textvariable=save_path_all_var, fg="gray")
+        save_path_all_label = Label(user_frame_1, textvariable=save_path_all_var, fg="gray", wraplength=400)
         save_path_all_label.grid(row=8, column=1)
 
         Label(user_frame_1, text="Save Path Day").grid(row=9, column=0)
-        save_path_day_label = Label(user_frame_1, textvariable=save_path_day_var, fg="gray")
+        save_path_day_label = Label(user_frame_1, textvariable=save_path_day_var, fg="gray", wraplength=400)
         save_path_day_label.grid(row=9, column=1)
+
+        Button(user_frame_1, text="Select Save Path All", command=lambda: select_save_path_all(save_path_all_var)).grid(row=8, column=2)
+        Button(user_frame_1, text="Select Save Path Day", command=lambda: select_save_path_day(save_path_day_var)).grid(row=9, column=2)
 
         # Buttons
         button_width = 20  # Ändere die Breite nach Bedarf
         button_height = 4
 
         Button(user_frame_1, text="Save DB Config", width=button_width, height=button_height,
-               command=lambda: button_function_WrDB(entry_host.get(), entry_user.get(), entry_db.get())).grid(row=4, column=0, columnspan=2, sticky="e")
+               command=lambda: button_function_WrDB(entry_host.get(), entry_user.get(), entry_db.get())).grid(row=4, column=0, columnspan=3, sticky="e")
 
         Button(user_frame_1, text="Save DB ALL", width=button_width, height=button_height,
-               command=button_function_Save_all).grid(row=5, column=0, columnspan=2, sticky="e")
+               command=button_function_Save_all).grid(row=5, column=0, columnspan=3, sticky="e")
 
         Button(user_frame_1, text="Save DB Day", width=button_width, height=button_height,
-               command=lambda: button_function_Save_Day(entry_Date.get())).grid(row=6, column=0, columnspan=2, sticky="e")
+               command=lambda: button_function_Save_Day(entry_Date.get())).grid(row=6, column=0, columnspan=3, sticky="e")
 
         Button(user_frame_1, text="DB Config", width=button_width, height=button_height,
-               command=lambda: open_database_settings(Main_GUI)).grid(row=7, column=0, columnspan=2, sticky="e")
+               command=lambda: open_database_settings(Main_GUI)).grid(row=7, column=0, columnspan=3, sticky="e")
 
         for widget in user_frame_1.winfo_children():
             widget.grid_configure(padx=20, pady=5)
     except Exception as e:
         print(f"Fehler beim Erstellen der GUI: {e}")
 
-#! ########################################### Neues Fenster Toplevel ###############################################################   
+def select_save_path_all(save_path_var):
+    path = askdirectory(title="Select Directory for Saving All Data")
+    if path:
+        save_path_var.set(path)
+
+def select_save_path_day(save_path_var):
+    path = askdirectory(title="Select Directory for Saving Daily Data")
+    if path:
+        save_path_var.set(path)
+
 def open_database_settings(Main_GUI):
     db_settings_window = Toplevel(Main_GUI)
     db_settings_window.title("Database Settings")
