@@ -77,7 +77,7 @@ def Write_Config(host, user, database):
 
 
 #! def- Schreibe alle Daten aus Datenbank in ein Excelfile (mit asksaveasfilename)  
-def DBSaveAll(host, user, database):
+def DBSaveAll(host, user, database, save_path):
     try:
         # Stelle die Verbindung zur Datenbank her
         db_connection = mysql.connector.connect(
@@ -92,13 +92,13 @@ def DBSaveAll(host, user, database):
         cursor.execute(select_query)
         results = cursor.fetchall()
 
-        # Öffne einen Dialog zum Speichern der CSV-Datei
-        root = Tk()
-        root.withdraw()
+        # Prüfe, ob der Pfad gesetzt ist
+        if not save_path:
+            print("Speicherpfad ist nicht gesetzt.")
+            return
 
-        file_path = asksaveasfilename(defaultextension=".csv", filetypes=[("CSV Dateien", "*.csv")])
-        if not file_path:
-            return  # Benutzer hat den Datei-Speicher-Dialog abgebrochen
+        # Füge einen Dateinamen hinzu
+        file_path = os.path.join(save_path, 'data_all.csv')
 
         # Schreibe die Daten in die CSV-Datei
         with open(file_path, 'w', newline='') as csv_file:
@@ -118,8 +118,6 @@ def DBSaveAll(host, user, database):
             db_connection.close()
         except:
             pass
-        # Schließe das Wurzelfenster
-        root.destroy()
 
 
 
