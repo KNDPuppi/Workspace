@@ -34,8 +34,6 @@ def HomeScreenConfig(Main_GUI, host, user, database,
 
         user_frame_1 = tk.LabelFrame(frame, text="User Information")
         user_frame_1.grid(row=0, column=0, padx=20, pady=10, sticky="news")
-
-        
          
         # Eingabefeld für das Datum hinzufügen
         entry_Date = DateEntry(user_frame_1, date_pattern="yyyy-mm-dd", width=20)
@@ -67,10 +65,8 @@ def HomeScreenConfig(Main_GUI, host, user, database,
         save_path_day_label = Label(user_frame_1, textvariable=save_path_day_var, fg="gray", wraplength=400)
         save_path_day_label.grid(row=9, column=1)
 
-        Button(user_frame_1, text="...",width=3,
-               command=lambda: select_save_path_all(save_path_all_var)).grid(row=8, column=2)
-        Button(user_frame_1, text="...",width=3,
-               command=lambda: select_save_path_day(save_path_day_var)).grid(row=9, column=2)
+        Button(user_frame_1, text="Select Save Path All", command=lambda: select_save_path_all(save_path_all_var)).grid(row=8, column=2)
+        Button(user_frame_1, text="Select Save Path Day", command=lambda: select_save_path_day(save_path_day_var)).grid(row=9, column=2)
 
         # Buttons
         button_width = 20  # Ändere die Breite nach Bedarf
@@ -92,7 +88,6 @@ def HomeScreenConfig(Main_GUI, host, user, database,
             widget.grid_configure(padx=20, pady=5)
     except Exception as e:
         print(f"Fehler beim Erstellen der GUI: {e}")
-
 
 def select_save_path_all(save_path_var):
     path = askdirectory(title="Select Directory for Saving All Data")

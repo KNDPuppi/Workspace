@@ -20,8 +20,8 @@ def Read_Config():
         host = config.get('Database', 'Host')
         user = config.get('Database', 'User')
         database = config.get('Database', 'Database')
-        save_path_all = config.get('Settings', 'SavePathAll')
-        save_path_day = config.get('Settings', 'SavePathDay')
+        save_path_all = config.get('Paths', 'SavePathAll')
+        save_path_day = config.get('Paths', 'SavePathDay')
     except (configparser.NoSectionError, configparser.NoOptionError) as e:
         print(f"Fehler beim Lesen der Konfiguration: {e}")
         return {'t_host': '', 't_user': '', 't_database': '', 'save_path_all': '', 'save_path_day': ''}
@@ -49,7 +49,7 @@ def Write_Config(host, user, database, save_path_all, save_path_day):
         'Database': database
     }
 
-    config['Settings'] = {
+    config['Paths'] = {
         'SavePathAll': save_path_all,
         'SavePathDay': save_path_day
     }
