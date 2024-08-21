@@ -22,25 +22,29 @@ def Read_Config():
     # Überprüfe, ob die Konfigurationsdatei existiert
     if not os.path.isfile(config_file_path):
         print(f"Konfigurationsdatei nicht gefunden: {config_file_path}")
-        return {'t_host': '', 't_user': '', 't_database': ''}
+        return {'t_host': '', 't_user': '', 't_database': '', 't_save_path_all': '', 't_save_path_day': ''}
 
     # Lese die Konfigurationsdatei
     config.read(config_file_path)
 
     # Versuche, die Konfigurationswerte zu lesen
     try:
-        host = config.get('Database', 'Host')
-        user = config.get('Database', 'User')
-        database = config.get('Database', 'Database')
+        host = config.get('Database', 'host')
+        user = config.get('Database', 'user')
+        database = config.get('Database', 'database')
+        save_path_all = config.get('Paths', 'save_path_all')
+        save_path_day = config.get('Paths', 'save_path_day')
     except (configparser.NoSectionError, configparser.NoOptionError) as e:
         print(f"Fehler beim Lesen der Konfiguration: {e}")
-        return {'t_host': '', 't_user': '', 't_database': ''}
+        return {'t_host': '', 't_user': '', 't_database': '', 't_save_path_all': '', 't_save_path_day': ''}
 
     # Definiere zu übergebende Variablen
     transfer_variables = {
         't_host': host,
         't_user': user,
-        't_database': database
+        't_database': database,
+        't_save_path_all': save_path_all,
+        't_save_path_day': save_path_day
     }
 
     return transfer_variables
@@ -49,9 +53,7 @@ def Read_Config():
 
 
 #! Schreibe die aktuellen Zugangsdaten der Config Datenbank  
-def Write_Config(host, user, database):
-         
-          
+def Write_Config(host, user, database, save_path_all='', save_path_day=''):
     # Bestimme den Pfad zum Verzeichnis der Python-Datei
     script_directory = os.path.dirname(os.path.abspath(__file__))
 
@@ -64,15 +66,19 @@ def Write_Config(host, user, database):
 
     # Aktualisiere die Konfigurationsdaten
     config['Database'] = {
-        'Host': host,
-        'User': user,
-        'Database': database
+        'host': host,
+        'user': user,
+        'database': database
     }
     
+    config['Paths'] = {
+        'save_path_all': save_path_all,
+        'save_path_day': save_path_day
+    }
+
     # Konfigurationsdaten in die Datei schreiben
     with open(config_file_path, 'w') as config_file:
         config.write(config_file)
-
 
 
 
