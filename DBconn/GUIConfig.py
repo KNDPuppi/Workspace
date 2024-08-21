@@ -37,16 +37,21 @@ def HomeScreenConfig(Main_GUI, host, user, database, save_path_all, save_path_da
         entry_Date.grid(row=0, column=1)
 
         # Eingabefelder
-        labels_and_entries = [
-            ("Host", entry_host := ttk.Entry(user_frame_1, width=23, justify="right")),
-            ("User", entry_user := ttk.Entry(user_frame_1, width=23, justify="right")),
-            ("Database", entry_db := ttk.Entry(user_frame_1, width=23, justify="right"))
-        ]
+        entry_host = ttk.Entry(user_frame_1, width=23, justify="right")
+        entry_user = ttk.Entry(user_frame_1, width=23, justify="right")
+        entry_db = ttk.Entry(user_frame_1, width=23, justify="right")
 
-        for i, (label_text, entry) in enumerate(labels_and_entries, start=1):
-            Label(user_frame_1, text=label_text).grid(row=i, column=0)
-            entry.grid(row=i, column=1)
-            entry.insert(0, locals()[f"entry_{label_text.lower()}"])
+        Label(user_frame_1, text="Host").grid(row=1, column=0)
+        entry_host.grid(row=1, column=1)
+        entry_host.insert(0, host)
+
+        Label(user_frame_1, text="User").grid(row=2, column=0)
+        entry_user.grid(row=2, column=1)
+        entry_user.insert(0, user)
+
+        Label(user_frame_1, text="Database").grid(row=3, column=0)
+        entry_db.grid(row=3, column=1)
+        entry_db.insert(0, database)
 
         # Speicherpfadeingaben
         Label(user_frame_1, text="Save Path All").grid(row=4, column=0)
