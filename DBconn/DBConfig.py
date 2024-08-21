@@ -3,7 +3,8 @@ import os
 import mysql.connector
 import csv
 from tkinter import Tk
-from tkinter.filedialog import asksaveasfilename, askdirectory
+from tkinter.filedialog import asksaveasfilename
+import datetime
 
 def Read_Config():
     script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -12,7 +13,14 @@ def Read_Config():
     config = configparser.ConfigParser()
     if not os.path.isfile(config_file_path):
         print(f"Konfigurationsdatei nicht gefunden: {config_file_path}")
-        return {'t_host': '', 't_user': '', 't_database': '', 'save_path_all': '', 'save_path_day': ''}
+        return {
+            't_host': '',
+            't_user': '',
+            't_database': '',
+            'save_path_all': '',
+            'save_path_day': '',
+            'scheduled_time': '00:00'  # Standardzeit
+        }
 
     config.read(config_file_path)
 
@@ -22,21 +30,28 @@ def Read_Config():
         database = config.get('Database', 'Database')
         save_path_all = config.get('Settings', 'SavePathAll')
         save_path_day = config.get('Settings', 'SavePathDay')
+        scheduled_time = config.get('Settings', 'ScheduledTime')
     except (configparser.NoSectionError, configparser.NoOptionError) as e:
         print(f"Fehler beim Lesen der Konfiguration: {e}")
-        return {'t_host': '', 't_user': '', 't_database': '', 'save_path_all': '', 'save_path_day': ''}
+        return {
+            't_host': '',
+            't_user': '',
+            't_database': '',
+            'save_path_all': '',
+            'save_path_day': '',
+            'scheduled_time': '00:00'
+        }
 
-    transfer_variables = {
+    return {
         't_host': host,
         't_user': user,
         't_database': database,
         'save_path_all': save_path_all,
-        'save_path_day': save_path_day
+        'save_path_day': save_path_day,
+        'scheduled_time': scheduled_time
     }
 
-    return transfer_variables
-
-def Write_Config(host, user, database, save_path_all, save_path_day):
+def Write_Config(host, user, database, save_path_all, save_path_day, scheduled_time):
     script_directory = os.path.dirname(os.path.abspath(__file__))
     config_file_path = os.path.join(script_directory, 'config.ini')
 
@@ -51,7 +66,8 @@ def Write_Config(host, user, database, save_path_all, save_path_day):
 
     config['Settings'] = {
         'SavePathAll': save_path_all,
-        'SavePathDay': save_path_day
+        'SavePathDay': save_path_day,
+        'ScheduledTime': scheduled_time
     }
 
     with open(config_file_path, 'w') as config_file:
@@ -69,13 +85,23 @@ def DBSaveAll(host, user, database, save_path_all):
         cursor.execute(select_query)
         results = cursor.fetchall()
 
+        # Wenn der Speicherpfad nicht angegeben ist, öffne den Dateidialog
         if not save_path_all:
             root = Tk()
             root.withdraw()
-            save_path_all = asksaveasfilename(defaultextension=".csv", filetypes=[("CSV Dateien", "*.csv")])
+            save_path_all = asksaveasfilename(
+                defaultextension=".csv",
+                filetypes=[("CSV Dateien", "*.csv")],
+                initialfile=f"data_all_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+            )
             if not save_path_all:
                 return  # Benutzer hat den Datei-Speicher-Dialog abgebrochen
             root.destroy()
+
+        # Überprüfen, ob das Verzeichnis existiert, und ggf. erstellen
+        directory = os.path.dirname(save_path_all)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
 
         with open(save_path_all, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
@@ -107,13 +133,23 @@ def DBSaveCurDay(host, user, database, inputDay, save_path_day):
         cursor.execute(select_query, (date,))
         results = cursor.fetchall()
 
+        # Wenn der Speicherpfad nicht angegeben ist, öffne den Dateidialog
         if not save_path_day:
             root = Tk()
             root.withdraw()
-            save_path_day = asksaveasfilename(defaultextension=".csv", filetypes=[("CSV Dateien", "*.csv")])
+            save_path_day = asksaveasfilename(
+                defaultextension=".csv",
+                filetypes=[("CSV Dateien", "*.csv")],
+                initialfile=f"data_day_{date}.csv"
+            )
             if not save_path_day:
                 return  # Benutzer hat den Datei-Speicher-Dialog abgebrochen
             root.destroy()
+
+        # Überprüfen, ob das Verzeichnis existiert, und ggf. erstellen
+        directory = os.path.dirname(save_path_day)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
 
         with open(save_path_day, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)

@@ -9,7 +9,8 @@ def HomeScreenConfig(Main_GUI, host, user, database,
                      button_function_Save_all,
                      button_function_Save_Day,
                      save_path_all_var,
-                     save_path_day_var):
+                     save_path_day_var,
+                     scheduled_time_var):
     try:
         style = ttk.Style(Main_GUI)
 
@@ -35,8 +36,6 @@ def HomeScreenConfig(Main_GUI, host, user, database,
         user_frame_1 = tk.LabelFrame(frame, text="User Information")
         user_frame_1.grid(row=0, column=0, padx=20, pady=10, sticky="news")
 
-        
-         
         # Eingabefeld für das Datum hinzufügen
         entry_Date = DateEntry(user_frame_1, date_pattern="yyyy-mm-dd", width=20)
         entry_Date.grid(row=0, column=1)
@@ -67,10 +66,15 @@ def HomeScreenConfig(Main_GUI, host, user, database,
         save_path_day_label = Label(user_frame_1, textvariable=save_path_day_var, fg="gray", wraplength=400)
         save_path_day_label.grid(row=9, column=1)
 
-        Button(user_frame_1, text="...",width=3,
+        Button(user_frame_1, text="...", width=3,
                command=lambda: select_save_path_all(save_path_all_var)).grid(row=8, column=2)
-        Button(user_frame_1, text="...",width=3,
+        Button(user_frame_1, text="...", width=3,
                command=lambda: select_save_path_day(save_path_day_var)).grid(row=9, column=2)
+
+        # Eingabefeld für die Zeit hinzufügen
+        Label(user_frame_1, text="Scheduled Time").grid(row=10, column=0)
+        entry_time = ttk.Entry(user_frame_1, width=10, justify="right", textvariable=scheduled_time_var)
+        entry_time.grid(row=10, column=1)
 
         # Buttons
         button_width = 20  # Ändere die Breite nach Bedarf
@@ -92,7 +96,6 @@ def HomeScreenConfig(Main_GUI, host, user, database,
             widget.grid_configure(padx=20, pady=5)
     except Exception as e:
         print(f"Fehler beim Erstellen der GUI: {e}")
-
 
 def select_save_path_all(save_path_var):
     path = askdirectory(title="Select Directory for Saving All Data")
